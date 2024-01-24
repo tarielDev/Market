@@ -1,7 +1,4 @@
-﻿using Microsoft.Identity.Client.Extensions.Msal;
-using System.Text.RegularExpressions;
-
-namespace Market.Models
+﻿namespace Market.Models
 {
     public class Product: BaseModel
     {

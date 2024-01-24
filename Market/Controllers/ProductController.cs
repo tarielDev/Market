@@ -8,7 +8,7 @@ namespace Market.Controllers
     public class ProductController: ControllerBase
     {
 
-        [HttpGet("getProduct")]
+        [HttpGet("getProducts")]
         public IActionResult GetProducts()
         {
             try
