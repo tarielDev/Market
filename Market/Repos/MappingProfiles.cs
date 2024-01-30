@@ -10,7 +10,7 @@ namespace Market.Repos
         public MappingProfiles()
         {
             CreateMap<Product, ProductDto>(MemberList.Destination).ReverseMap();
-            CreateMap<Group, CategoryDto>(MemberList.Destination).ReverseMap();
+            CreateMap<Category, CategoryDto>(MemberList.Destination).ReverseMap();
             CreateMap<Store, StoreDto>(MemberList.Destination).ReverseMap();
         }
     }
