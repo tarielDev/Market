@@ -1,6 +1,6 @@
-﻿namespace Market.Models
+﻿namespace Market.Models.Dtos
 {
-    public class BaseModel
+    public class StoreDto
     {
         public int Id { get; set; }
         public string? Name { get; set; }
