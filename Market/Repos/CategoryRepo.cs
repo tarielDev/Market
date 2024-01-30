@@ -27,7 +27,7 @@ namespace Market.Repos
                 entityCategory = _mapper.Map<Category>(categoryDto);
                 context.Categories.Add(entityCategory);
                 context.SaveChanges();
-                _cache.Remove("groups");
+                _cache.Remove("categories");
             }
             return entityCategory.Id;
         }
@@ -36,26 +36,26 @@ namespace Market.Repos
         {
             using (var context = new MarketContext())
             {
-                if (_cache.TryGetValue("products", out List<CategoryDto> groups))
+                if (_cache.TryGetValue("products", out List<CategoryDto> categoriesDto))
                 {
-                    return groups;
+                    return categoriesDto;
                 }
 
-                _cache.Set("products", groups, TimeSpan.FromMinutes(30));
-                var getGroups = context.Categories.Select(x => _mapper.Map<CategoryDto>(x)).ToList();
+                _cache.Set("products", categoriesDto, TimeSpan.FromMinutes(30));
+                var getCategories = context.Categories.Select(x => _mapper.Map<CategoryDto>(x)).ToList();
 
-                return getGroups;
+                return getCategories;
             }
         }
 
         public string GetCategoriesCSV()
         {
             var sb = new StringBuilder();
-            var groups = GetCategories();
+            var categories = GetCategories();
 
-            foreach (var group in groups)
+            foreach (var category in categories)
             {
-                sb.AppendLine($"{group.Id},{group.Name}, {group.Description}");
+                sb.AppendLine($"{category.Id},{category.Name}, {category.Description}");
             }
 
             return sb.ToString();
