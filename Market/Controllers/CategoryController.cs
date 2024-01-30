@@ -18,22 +18,22 @@ namespace Market.Controllers
             _categoryRepo = categoryRepo;
         }
 
-        [HttpPost("addGroup")]
-        public IActionResult AddGroup([FromBody] CategoryDto categoryDto)
+        [HttpPost("addCategory")]
+        public IActionResult AddCategory([FromBody] CategoryDto categoryDto)
         {
             var result = _categoryRepo.AddCategory(categoryDto);
             return Ok(result);
         }
 
-        [HttpGet("getGroups")]
-        public IActionResult GetGroups()
+        [HttpGet("getCategories")]
+        public IActionResult GetCategories()
         {
             var result = _categoryRepo.GetCategories();
             return Ok(result);
         }
 
-        [HttpDelete("deleteGroup")]
-        public IActionResult DeleteGroup([FromQuery] int id)
+        [HttpDelete("deleteCategory")]
+        public IActionResult DeleteCategory([FromQuery] int id)
         {
             try
             {
@@ -44,8 +44,8 @@ namespace Market.Controllers
                         return NotFound();
                     }
 
-                    Category product = context.Categories.FirstOrDefault(x => x.Id == id)!;
-                    context.Categories.Remove(product);
+                    Category category = context.Categories.FirstOrDefault(x => x.Id == id)!;
+                    context.Categories.Remove(category);
                     context.SaveChanges();
 
                     return Ok();
@@ -62,7 +62,7 @@ namespace Market.Controllers
         {
             var content = _categoryRepo.GetCategoriesCSV();
 
-            return File(new System.Text.UTF8Encoding().GetBytes(content), "text/csv", "Groups.csv");
+            return File(new System.Text.UTF8Encoding().GetBytes(content), "text/csv", "Categories.csv");
         }
 
         [HttpGet("GetCacheCSV")]
@@ -72,7 +72,7 @@ namespace Market.Controllers
 
             if (result is not null)
             {
-                var fileName = $"groups{DateTime.Now.ToBinary()}.csv";
+                var fileName = $"Categories_{DateTime.Now.ToBinary()}.csv";
 
                 System.IO.File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles", fileName), result);
 
