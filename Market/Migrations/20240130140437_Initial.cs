@@ -42,7 +42,8 @@ namespace Market.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Cost = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     ProductName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
@@ -53,7 +54,7 @@ namespace Market.Migrations
                     table.PrimaryKey("ProductId", x => x.Id);
                     table.ForeignKey(
                         name: "CategoryToProduct",
-                        column: x => x.Id,
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -90,9 +91,9 @@ namespace Market.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_Id",
+                name: "IX_Products_CategoryId",
                 table: "Products",
-                column: "Id");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductStores_StoreId",

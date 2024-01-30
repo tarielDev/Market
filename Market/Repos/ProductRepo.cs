@@ -19,8 +19,8 @@ namespace Market.Repos
 
         public int AddProduct(ProductDto productDto)
         {
-            using (var context = new MarketContext())
-            {
+            using var context = new MarketContext();
+            
                 var entityProduct = context.Products.FirstOrDefault(x => x.Name.ToLower() == productDto.Name.ToLower());
                 if (entityProduct is null)
                 {
@@ -30,7 +30,7 @@ namespace Market.Repos
                     _cache.Remove("products");
                 }
                 return entityProduct.Id;
-            }
+            
         }
 
         public IEnumerable<ProductDto> GetProducts()
@@ -44,7 +44,7 @@ namespace Market.Repos
 
                 _cache.Set("products", products, TimeSpan.FromMinutes(30));
 
-                products = context.Categories.Select(x => _mapper.Map<ProductDto>(x)).ToList();
+                products = context.Products.Select(x => _mapper.Map<ProductDto>(x)).ToList();
 
                 return products;
             }

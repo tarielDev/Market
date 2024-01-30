@@ -51,7 +51,10 @@ namespace Market.Migrations
             modelBuilder.Entity("Market.Models.Product", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -75,7 +78,7 @@ namespace Market.Migrations
                     b.HasKey("Id")
                         .HasName("ProductId");
 
-                    b.HasIndex("Id");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products", (string)null);
                 });
@@ -120,7 +123,7 @@ namespace Market.Migrations
                 {
                     b.HasOne("Market.Models.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("CategoryToProduct");
