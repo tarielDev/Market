@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Market.Migrations
 {
     [DbContext(typeof(MarketContext))]
-    [Migration("20240130115006_Initial")]
+    [Migration("20240130125949_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -77,6 +77,8 @@ namespace Market.Migrations
 
                     b.HasKey("Id")
                         .HasName("ProductId");
+
+                    b.HasIndex("Id");
 
                     b.ToTable("Products", (string)null);
                 });

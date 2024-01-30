@@ -1,4 +1,6 @@
-﻿using Market.Models;
+﻿using Market.Abstract;
+using Market.Models;
+using Market.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Controllers
@@ -7,57 +9,25 @@ namespace Market.Controllers
     [Route("[controller]")]
     public class ProductController: ControllerBase
     {
+        private readonly IProductRepo _productRepo;
 
-        [HttpGet("getProducts")]
+        public ProductController(IProductRepo productRepo)
+        {
+            _productRepo = productRepo;
+        }
+
+        [HttpGet("getProduct")]
         public IActionResult GetProducts()
         {
-            try
-            {
-                using (var context = new MarketContext())
-                {
-                    var products = context.Products.Select(x => new Product()
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Description = x.Description
-                    });
-                    return Ok(products);
-                }
-            }
-            catch
-            {
-                return StatusCode(500);
-            }
+            var products = _productRepo.GetProducts();
+            return Ok(products);
         }
 
         [HttpPost("addProduct")]
-        public IActionResult AddProduct([FromQuery] string name, string description, int categoryId, int cost)
+        public IActionResult AddProduct([FromBody] ProductDto productDto)
         {
-            try
-            {
-                using (var context = new MarketContext())
-                {
-                    if (!context.Products.Any(x => x.Name.ToLower().Equals(name)))
-                    {
-                        context.Add(new Product()
-                        {
-                            Name = name,
-                            Description = description,
-                            Cost = cost,
-                            CategoryId = categoryId
-                        });
-                        context.SaveChanges();
-                        return Ok();
-                    }
-
-                    return StatusCode(409);
-
-                }
-            }
-            catch
-            {
-                return StatusCode(500);
-            }
+            var result = _productRepo.AddProduct(productDto);
+            return Ok(result);
         }
 
         [HttpDelete("deleteProduct")]
@@ -77,7 +47,6 @@ namespace Market.Controllers
                     context.SaveChanges();
 
                     return Ok();
-
                 }
             }
             catch
@@ -87,7 +56,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("addProductPrice")]
-        public IActionResult AddProductPrice([FromQuery] int id, int cost)
+        public IActionResult AddProductPrice([FromQuery] int id, int price)
         {
             try
             {
@@ -99,7 +68,7 @@ namespace Market.Controllers
                     }
 
                     Product product = context.Products.FirstOrDefault(x => x.Id == id)!;
-                    product.Cost = cost;
+                    product.Cost = price;
                     context.SaveChanges();
 
                     return Ok();
@@ -109,6 +78,31 @@ namespace Market.Controllers
             {
                 return StatusCode(500);
             }
+        }
+
+        [HttpGet("GetProductsCSV")]
+        public FileContentResult GetCSV()
+        {
+            var content = _productRepo.GetProductsCSV();
+
+            return File(new System.Text.UTF8Encoding().GetBytes(content), "text/csv", "Products.csv");
+        }
+
+        [HttpGet("GetCacheCSVUrl")]
+        public ActionResult<string> GetCacheCSVUrl()
+        {
+            var result = _productRepo.GetСacheStatCSV();
+
+            if (result is not null)
+            {
+                var fileName = $"products{DateTime.Now.ToBinary()}.csv";
+
+                System.IO.File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles", fileName), result);
+
+                return "https://" + Request.Host.ToString() + "/static/" + fileName;
+            }
+
+            return StatusCode(500);
         }
     }
 }

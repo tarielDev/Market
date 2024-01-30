@@ -21,6 +21,7 @@ namespace Market.Models
             {
                 entity.ToTable("Products");
                 entity.HasKey(x => x.Id).HasName("ProductId");
+                entity.HasIndex(x => x.Id);
                 entity.Property(e => e.Name).HasColumnName("ProductName").HasMaxLength(255).IsRequired();
                 entity.Property(e => e.Description).HasColumnName("Description").HasMaxLength(255).IsRequired();
                 entity.Property(e => e.Cost).HasColumnName("Cost").IsRequired();

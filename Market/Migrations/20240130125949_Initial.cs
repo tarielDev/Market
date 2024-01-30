@@ -90,6 +90,11 @@ namespace Market.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_Id",
+                table: "Products",
+                column: "Id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductStores_StoreId",
                 table: "ProductStores",
                 column: "StoreId");

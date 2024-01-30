@@ -75,6 +75,8 @@ namespace Market.Migrations
                     b.HasKey("Id")
                         .HasName("ProductId");
 
+                    b.HasIndex("Id");
+
                     b.ToTable("Products", (string)null);
                 });
 
